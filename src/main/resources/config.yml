@@ -1,0 +1,5 @@
+qq_number: 12345
+qq_password: 12345
+qq_group: 12345,12345
+debug_mode: false
+redirect_standard_input: false
