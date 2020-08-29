@@ -5,6 +5,7 @@ Nukkit and QQ Group message sync plugin
 ![GitHub](https://img.shields.io/github/license/Isla4ever/NukkitQQSync)  
 Please submit all problems by issue
 - [x] Nukkit Server and QQ Group message sync
+- [x] Support panel platform like pterodactyl
 - [ ] Sync player join and quit event
 - [ ] Take care of chat color
 - [ ] Whitelist function
