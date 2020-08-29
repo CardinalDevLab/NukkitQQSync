@@ -4,6 +4,8 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerChatEvent;
+import cn.nukkit.event.player.PlayerJoinEvent;
+import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import kotlin.coroutines.Continuation;
@@ -41,6 +43,8 @@ public class NukkitQQ extends PluginBase implements Listener {
 
     @Override
     public void onEnable() {
+        int pluginId = 8706;
+        Metrics metrics = new Metrics(this, pluginId);
         datafolder = this.getDataFolder();
         /*
         Bot config load state
@@ -49,22 +53,11 @@ public class NukkitQQ extends PluginBase implements Listener {
         qq_number = config.getLong("qq_number");
         qq_password = config.getString("qq_password");
         log = config.getBoolean("debug_mode");
-        redirect_standard_input = config.getBoolean("redirect_standard_input");
+        redirect_standard_input = config.getBoolean("nogui_support");
         qq_group = config.getString("qq_group").split(",");
-/*
-Not usable now
- */
-//        if (redirect_standard_input) {
-//            try {
-//                System.setIn(new FileInputStream(new File("input.txt")));
-//            } catch (Exception e) {
-//                System.out.println(e);
-//            }
-//        }
 
         this.getServer().getPluginManager().registerEvents(this, this);
         LoginSolver loginsolver = new LoginSolver() {
-
             @Nullable
             @Override
             public Object onSolvePicCaptcha(@NotNull Bot bot, @NotNull byte[] bytes, @NotNull Continuation<? super String> continuation) {
@@ -240,7 +233,7 @@ Not usable now
                             String message = event.getMessage().contentToString();
                             String sender = event.getSenderName();
                             for (Player player : Server.getInstance().getOnlinePlayers().values()) {
-                                player.sendMessage("[QQ-" + sender + "]" + message);
+                                player.sendMessage("§e[QQ-" + sender + "] §2" + message);
                             }
                         }
                     }
@@ -258,10 +251,24 @@ Not usable now
     }
 
     @cn.nukkit.event.EventHandler
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerChat (PlayerChatEvent event) {
         String message = event.getMessage();
         for (int i = 0; i < qq_group.length; i++) {
             bot.getGroup(Long.parseLong(qq_group[i])).sendMessage("[" + event.getPlayer().getName() + "]" + message);
+        }
+    }
+    @cn.nukkit.event.EventHandler
+    public void onPlayerJoin (PlayerJoinEvent event) {
+        String name = event.getPlayer().getName();
+        for (int i = 0; i < qq_group.length; i++) {
+            bot.getGroup(Long.parseLong(qq_group[i])).sendMessage("玩家" + name + "加入了服务器");
+        }
+    }
+    @cn.nukkit.event.EventHandler
+    public void onPlayerQuit (PlayerQuitEvent event) {
+        String name = event.getPlayer().getName();
+        for (int i = 0; i < qq_group.length; i++) {
+            bot.getGroup(Long.parseLong(qq_group[i])).sendMessage("玩家" + name + "退出了服务器");
         }
     }
 }
