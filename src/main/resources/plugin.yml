@@ -4,3 +4,5 @@ version: "0.1"
 author: Isla4ever
 api: ["1.0.8"]
 description: QQ in Nukkit
+loadbefore:
+  - ChatBubble
