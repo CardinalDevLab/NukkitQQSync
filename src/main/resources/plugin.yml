@@ -1,6 +1,6 @@
 name: NukkitQQ
-main: app.Isla4ever.NukkitQQ
-version: "0.1"
+main: dev.cardinaldevlab.NukkitQQ
+version: "0.6"
 author: Isla4ever
 api: ["1.0.8"]
 description: QQ in Nukkit

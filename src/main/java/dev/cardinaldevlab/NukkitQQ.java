@@ -1,4 +1,4 @@
-package app.Isla4ever;
+package dev.cardinaldevlab;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
@@ -10,12 +10,12 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import kotlin.coroutines.Continuation;
 import net.mamoe.mirai.Bot;
-import net.mamoe.mirai.BotFactoryJvm;
+import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.Events;
 import net.mamoe.mirai.event.ListeningStatus;
 import net.mamoe.mirai.event.SimpleListenerHost;
-import net.mamoe.mirai.message.GroupMessageEvent;
+import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.mamoe.mirai.utils.BotConfiguration;
 import net.mamoe.mirai.utils.LoginSolver;
 import org.jetbrains.annotations.NotNull;
@@ -191,14 +191,14 @@ public class NukkitQQ extends PluginBase implements Listener {
          */
         if (!redirect_standard_input) {
             if (log) {
-                bot = BotFactoryJvm.newBot(qq_number, qq_password, new BotConfiguration() {
+                bot = BotFactory.INSTANCE.newBot(qq_number, qq_password, new BotConfiguration() {
                     {
                         fileBasedDeviceInfo(datafolder+"/deviceInfo.json");
                         setLoginSolver(loginsolver);
                     }
                 });
             } else {
-                bot = BotFactoryJvm.newBot(qq_number, qq_password, new BotConfiguration() {
+                bot = BotFactory.INSTANCE.newBot(qq_number, qq_password, new BotConfiguration() {
                     {
                         fileBasedDeviceInfo(datafolder+"/deviceInfo.json");
                         noBotLog();
@@ -208,13 +208,13 @@ public class NukkitQQ extends PluginBase implements Listener {
             }
         } else {
             if (log) {
-                bot = BotFactoryJvm.newBot(qq_number, qq_password, new BotConfiguration() {
+                bot = BotFactory.INSTANCE.newBot(qq_number, qq_password, new BotConfiguration() {
                     {
                         fileBasedDeviceInfo(datafolder+"/deviceInfo.json");
                     }
                 });
             } else {
-                bot = BotFactoryJvm.newBot(qq_number, qq_password, new BotConfiguration() {
+                bot = BotFactory.INSTANCE.newBot(qq_number, qq_password, new BotConfiguration() {
                     {
                         fileBasedDeviceInfo(datafolder+"/deviceInfo.json");
                         noBotLog();

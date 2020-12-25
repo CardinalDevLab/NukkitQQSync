@@ -1,4 +1,4 @@
-package app.Isla4ever;
+package dev.cardinaldevlab;
 
 import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;
