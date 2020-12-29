@@ -11,6 +11,7 @@ import cn.nukkit.utils.Config;
 import kotlin.coroutines.Continuation;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
+import net.mamoe.mirai.Mirai;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.Events;
 import net.mamoe.mirai.event.ListeningStatus;
@@ -58,6 +59,10 @@ public class NukkitQQ extends PluginBase implements Listener {
 
         this.getServer().getPluginManager().registerEvents(this, this);
         LoginSolver loginsolver = new LoginSolver() {
+            public boolean isSliderCaptchaSupported() {
+                return true;
+            }
+
             @Nullable
             @Override
             public Object onSolvePicCaptcha(@NotNull Bot bot, @NotNull byte[] bytes, @NotNull Continuation<? super String> continuation) {
@@ -107,12 +112,17 @@ public class NukkitQQ extends PluginBase implements Listener {
             @Nullable
             @Override
             public Object onSolveSliderCaptcha(@NotNull Bot bot, @NotNull String url, @NotNull Continuation<? super String> continuation) {
+                final String[] return_data = new String[1];
+                return_data[0] = "";
+                Server.getInstance().getLogger().info(datafolder.getAbsolutePath());
+
                 Server.getInstance().getLogger().info("需要滑动验证码，请在任意浏览器中打开以下链接并完成验证码");
-                Server.getInstance().getLogger().info("完成后请更改/插件目录/temp/captcha_state.txt第一行为任意字符");
+                Server.getInstance().getLogger().info(url);
+                Server.getInstance().getLogger().info("完成后请更改/插件目录/temp/captcha_state.txt第一行为ticket");
+                Server.getInstance().getLogger().info("详细说明请查看https://github.com/project-mirai/mirai-login-solver-selenium");
+                Server.getInstance().getLogger().info("或者https://github.com/Mrs4s/go-cqhttp/blob/master/docs/slider.md中的抓包方法");
                 try {
-                    final String[] return_data = new String[1];
-                    return_data[0] = "";
-                    File answer = new File(datafolder + "/temp/captcha_state.txt");
+                    File answer = new File(datafolder + "/temp/slider_captcha_state.txt");
                     if (!answer.exists()) {
                         File dir = new File(answer.getParent());
                         dir.mkdir();
@@ -140,7 +150,8 @@ public class NukkitQQ extends PluginBase implements Listener {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-                return "finished";
+                return return_data[0];
+
             }
 
             @Nullable
@@ -154,7 +165,7 @@ public class NukkitQQ extends PluginBase implements Listener {
                 try {
                     final String[] return_data = new String[1];
                     return_data[0] = "";
-                    File answer = new File(datafolder + "/temp/captcha_state.txt");
+                    File answer = new File(datafolder + "/temp/device_captcha_state.txt");
                     if (!answer.exists()) {
                         File dir = new File(answer.getParent());
                         dir.mkdir();
@@ -185,7 +196,6 @@ public class NukkitQQ extends PluginBase implements Listener {
                 return "finished";
             }
         };
-
         /*
         Bot login state
          */
@@ -194,7 +204,6 @@ public class NukkitQQ extends PluginBase implements Listener {
                 bot = BotFactory.INSTANCE.newBot(qq_number, qq_password, new BotConfiguration() {
                     {
                         fileBasedDeviceInfo(datafolder+"/deviceInfo.json");
-                        setLoginSolver(loginsolver);
                     }
                 });
             } else {
@@ -210,12 +219,14 @@ public class NukkitQQ extends PluginBase implements Listener {
             if (log) {
                 bot = BotFactory.INSTANCE.newBot(qq_number, qq_password, new BotConfiguration() {
                     {
+                        setLoginSolver(loginsolver);
                         fileBasedDeviceInfo(datafolder+"/deviceInfo.json");
                     }
                 });
             } else {
                 bot = BotFactory.INSTANCE.newBot(qq_number, qq_password, new BotConfiguration() {
                     {
+                        setLoginSolver(loginsolver);
                         fileBasedDeviceInfo(datafolder+"/deviceInfo.json");
                         noBotLog();
                         noNetworkLog();
@@ -242,7 +253,7 @@ public class NukkitQQ extends PluginBase implements Listener {
             }
         });
 
-        this.getLogger().info("NukkitQQ by Isla4ever Started");
+        this.getLogger().info("NukkitQQ by CardinalDevLab Started");
     }
 
     @Override
