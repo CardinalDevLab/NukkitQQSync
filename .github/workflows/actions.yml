@@ -41,4 +41,4 @@ jobs:
           prerelease: false
           title: "Latest Build"
           files: |
-            NukkitQQSync.jar
+            target/NukkitQQSync.jar
